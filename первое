@@ -1,0 +1,97 @@
+#include <iostream>
+#include <locale.h>
+
+template <typename T>
+class Node {
+public:
+    T data;
+    Node* next;
+
+    Node(const T& data) : data(data), next(nullptr) {}
+};
+
+template <typename T>
+class SinglyLinkedList {
+private:
+    Node<T>* head;
+
+public:
+    SinglyLinkedList() : head(nullptr) {}
+
+
+    void append(const T& data) {
+        Node<T>* newNode = new Node<T>(data);
+        if (head == nullptr) {
+            head = newNode;
+            return;
+        }
+        Node<T>* current = head;
+        while (current->next != nullptr) {
+            current = current->next;
+        }
+        current->next = newNode;
+    }
+
+    void removeFirst() {
+        if (head == nullptr) {}
+        Node<T>* temp = head;
+        head = head->next;
+        delete temp;
+    }
+
+    bool hasDuplicates() {
+        if (head == nullptr || head->next == nullptr) {
+            return false;
+        }
+        Node<T>* current = head;
+        while (current != nullptr) {
+            Node<T>* runner = current->next;
+            while (runner != nullptr) {
+                if (current->data == runner->data) {
+                    return true;
+                }
+                runner = runner->next;
+            }
+            current = current->next;
+        }
+        return false;
+    }
+
+    void printList() {
+        Node<T>* current = head;
+        while (current != nullptr) {
+            std::cout << current->data << " ";
+            current = current->next;
+        }
+        std::cout << std::endl;
+    }
+};
+
+int main() {
+    setlocale(LC_ALL, "Russian");
+
+    SinglyLinkedList<int> intList;
+    intList.append(1);
+    intList.append(1);
+    intList.append(2);
+    intList.append(3);
+
+    std::cout << "Список целых чисел: ";
+    intList.printList();
+    std::cout << "Есть ли дубликаты? " << (intList.hasDuplicates() ? "Да" : "Нет") << std::endl;
+    intList.removeFirst();
+    std::cout << "Список после удаления первого элемента: ";
+    intList.printList();
+    std::cout << "Есть ли дубликаты? " << (intList.hasDuplicates() ? "Да" : "Нет") << std::endl;
+
+    SinglyLinkedList<std::string> stringList;
+    stringList.append("hello");
+    stringList.append("world");
+    stringList.append("hello");
+
+    std::cout << "\nСписок строк: ";
+    stringList.printList();
+    std::cout << "Есть ли дубликаты? " << (stringList.hasDuplicates() ? "Да" : "Нет") << std::endl;
+
+    return 0;
+}
